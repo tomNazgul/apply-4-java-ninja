@@ -17,6 +17,7 @@ Instructions
 4. Deploy this app (command: mvn clean package wildfly:deploy)
 5. Go sleep for a while.
 6. Write http://localhost:8080/wildfly-kitchensink-angularjs/#/home in your browser
+7. Wait for Syntagma's customer email from job@syntagma.com.ar with the detailed new requirement to be solved.
 
 #Now, the original readme from Jboss for further instructions...
 
