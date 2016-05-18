@@ -18,6 +18,8 @@ Instructions
 5. Go sleep for a while.
 6. Write http://localhost:8080/wildfly-kitchensink-angularjs/#/home in your browser
 7. Wait for Syntagma's customer email from job@syntagma.com.ar with the detailed new requirement to be solved.
+8. Make a git's pull request pushing your changes
+9. Answer the customer's email explaining the changes you made and how did you solved the problem. 
 
 #Now, the original readme from Jboss for further instructions...
 
