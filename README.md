@@ -11,17 +11,17 @@ Pre-requisites
 Instructions
 ------------------------------------
 
-1. Make a new branch called apply-[your-name-here]
-2. Download Jboss Wildfly 9.0.2 Final
+1. (Github) Fork this project (https://github.com/syntagma/apply-4-java-ninja/) with your Github's account.
+2. (Jboss official page) Download Jboss Wildfly 9.0.2 Final
 3. Run It (wildfly-folder/bin/standalone.sh or bat)
 4. Deploy this app (command: mvn clean package wildfly:deploy)
 5. Go sleep for a while.
 6. Write http://localhost:8080/wildfly-kitchensink-angularjs/#/home in your browser
 7. Wait for Syntagma's customer email from job@syntagma.com.ar with the detailed new requirement to be solved.
-8. Make a git's pull request pushing your changes
+8. (Github) Push the changes to your forked repository and ask for a git's pull request on our project.
 9. Answer the customer's email explaining the changes you made and how did you solved the problem. 
 
-#Now, the original readme from Jboss for further instructions...
+#Now, the original readme from Jboss for further instructions in case you have any problem...
 
 kitchensink-angularjs: Shows how to use AngularJS with JAX-RS and Java EE on JBoss
 ========================
