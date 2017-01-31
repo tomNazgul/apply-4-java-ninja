@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.jboss.as.quickstarts.kitchensink.model.Member;
 
+import static org.jboss.as.quickstarts.kitchensink.model.Member_.email;
+
 @ApplicationScoped
 public class MemberRepository {
 
@@ -44,6 +46,18 @@ public class MemberRepository {
         // feature in JPA 2.0
         // criteria.select(member).where(cb.equal(member.get(Member_.name), email));
         criteria.select(member).where(cb.equal(member.get("email"), email));
+        return em.createQuery(criteria).getSingleResult();
+    }
+
+    public Member findByName(String name) {
+        if (name == null) return null;
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Member> criteria = cb.createQuery(Member.class);
+        final Root<Member> member = criteria.from(Member.class);
+        // Swap criteria statements if you would like to try out type-safe criteria queries, a new
+        // feature in JPA 2.0
+        // criteria.select(member).where(cb.equal(member.get(Member_.name), email));
+        criteria.select(member).where(cb.equal(member.get("name"), name));
         return em.createQuery(criteria).getSingleResult();
     }
 

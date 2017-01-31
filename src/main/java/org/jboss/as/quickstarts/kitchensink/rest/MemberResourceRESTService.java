@@ -16,12 +16,10 @@
  */
 package org.jboss.as.quickstarts.kitchensink.rest;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -41,6 +39,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.as.quickstarts.kitchensink.data.MemberRepository;
+import org.jboss.as.quickstarts.kitchensink.exceptions.UniqueViolationException;
 import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
 
@@ -104,10 +103,10 @@ public class MemberResourceRESTService {
         } catch (ConstraintViolationException ce) {
             // Handle bean validation issues
             builder = createViolationResponse(ce.getConstraintViolations());
-        } catch (ValidationException e) {
+        } catch (UniqueViolationException e) {
             // Handle the unique constrain violation
-            Map<String, String> responseObj = new HashMap<>();
-            responseObj.put("email", "Email taken");
+            final Map<String, String> responseObj = new HashMap<>();
+            e.getFields().forEach(field -> responseObj.put(field, field + " taken"));
             builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
         } catch (Exception e) {
             // Handle generic exceptions
@@ -141,10 +140,22 @@ public class MemberResourceRESTService {
             throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
         }
 
+        final HashSet<String> uniqueViolationFields = new HashSet<>();
         // Check the uniqueness of the email address
         if (emailAlreadyExists(member.getEmail())) {
-            throw new ValidationException("Unique Email Violation");
+            uniqueViolationFields.add("email");
         }
+
+        // Check the uniqueness of the name
+        if (nameAlreadyExists(member.getName())) {
+            uniqueViolationFields.add("name");
+        }
+
+        if (!uniqueViolationFields.isEmpty()) {
+            //I add this exception to return all uniqueness fields violations at once
+            throw new UniqueViolationException(uniqueViolationFields);
+        }
+
     }
 
     /**
@@ -178,6 +189,16 @@ public class MemberResourceRESTService {
         try {
             member = repository.findByEmail(email);
         } catch (NoResultException e) {
+            // ignore
+        }
+        return member != null;
+    }
+
+    public boolean nameAlreadyExists(String name) {
+        Member member = null;
+        try {
+            member = repository.findByName(name);
+        } catch (final NoResultException ignored) {
             // ignore
         }
         return member != null;
